@@ -1,0 +1,502 @@
+# openapi: 3.0.0
+# info:
+#   title: Blueprint-XYZ API
+#   version: 1.0.0
+#   description: API documentation for the Blueprint-XYZ platform.
+# servers:
+#   - url: http://localhost:3000/api
+#     description: Local Development Server
+
+# paths:
+#   # ==========================
+#   # 🔐 AUTH & USERS
+#   # ==========================
+#   /auth/register:
+#     post:
+#       summary: Register a new user
+#       description: Registers a new user with credentials.
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               required: [username, email, password]
+#               properties:
+#                 username: { type: string }
+#                 email: { type: string }
+#                 password: { type: string }
+#       responses:
+#         '201': { description: User registered successfully }
+#         '400': { description: Invalid input }
+
+#   /auth/login:
+#     post:
+#       summary: Log in
+#       description: Authenticates a user.
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               required: [email, password]
+#               properties:
+#                 email: { type: string }
+#                 password: { type: string }
+#       responses:
+#         '200': { description: Login successful }
+#         '401': { description: Unauthorized }
+
+#   /auth/me:
+#     get:
+#       summary: Get current user
+#       responses:
+#         '200': { description: Current user retrieved }
+#         '401': { description: Unauthorized }
+
+#   /users/{username}:
+#     get:
+#       summary: Get user profile
+#       parameters:
+#         - name: username
+#           in: path
+#           required: true
+#           schema: { type: string }
+#       responses:
+#         '200': { description: User profile retrieved }
+#         '404': { description: User not found }
+
+#   /users/me:
+#     put:
+#       summary: Update current user profile
+#       responses:
+#         '200': { description: Profile updated }
+#         '401': { description: Unauthorized }
+
+#   /users/me/profile-picture:
+#     patch:
+#       summary: Update profile picture
+#       responses:
+#         '200': { description: Profile picture updated }
+
+#   # ==========================
+#   # 🎨 PROJECTS
+#   # ==========================
+#   /projects:
+#     get:
+#       summary: Get all projects
+#       parameters:
+#         - name: page
+#           in: query
+#           schema: { type: integer }
+#         - name: limit
+#           in: query
+#           schema: { type: integer }
+#       responses:
+#         '200': { description: Projects retrieved }
+#     post:
+#       summary: Create a project
+#       responses:
+#         '201': { description: Project created }
+
+#   /projects/{id}:
+#     get: { summary: Get project by ID, responses: { '200': { description: OK } } }
+#     put: { summary: Update project, responses: { '200': { description: Updated } } }
+#     delete: { summary: Delete project, responses: { '200': { description: Deleted } } }
+
+#   /projects/{id}/like:
+#     post: { summary: Like a project, responses: { '200': { description: Liked } } }
+#     delete: { summary: Unlike a project, responses: { '200': { description: Unliked } } }
+
+#   /projects/{id}/comments:
+#     get: { summary: Get project comments, responses: { '200': { description: OK } } }
+#     post: { summary: Add comment to project, responses: { '201': { description: Created } } }
+
+#   # ==========================
+#   # 🏢 STUDIOS
+#   # ==========================
+#   /studios:
+#     get: { summary: Get all studios, responses: { '200': { description: OK } } }
+#     post: { summary: Create a studio, responses: { '201': { description: Created } } }
+
+#   /studios/{id}:
+#     get: { summary: Get studio by ID, responses: { '200': { description: OK } } }
+#     put: { summary: Update studio, responses: { '200': { description: Updated } } }
+#     delete: { summary: Delete studio, responses: { '200': { description: Deleted } } }
+
+#   /studios/{id}/members:
+#     get: { summary: Get studio members, responses: { '200': { description: OK } } }
+#     post: { summary: Add member, responses: { '201': { description: Added } } }
+
+#   /studios/{id}/members/{userId}:
+#     delete: { summary: Remove member, responses: { '200': { description: Removed } } }
+
+#   /studios/{id}/jobs:
+#     get: { summary: Get jobs for a studio, responses: { '200': { description: OK } } }
+
+#   /studios/{id}/projects:
+#     get: { summary: Get projects for a studio, responses: { '200': { description: OK } } }
+
+#   # ==========================
+#   # 💼 JOBS
+#   # ==========================
+#   /jobs:
+#     get: { summary: Get all jobs, responses: { '200': { description: OK } } }
+#     post: { summary: Create job, responses: { '201': { description: Created } } }
+
+#   /jobs/{id}:
+#     get: { summary: Get job by ID, responses: { '200': { description: OK } } }
+#     put: { summary: Update job, responses: { '200': { description: Updated } } }
+#     delete: { summary: Delete job, responses: { '200': { description: Deleted } } }
+
+#   # ==========================
+#   # 📝 POSTS
+#   # ==========================
+#   /posts:
+#     get: { summary: Get all posts, responses: { '200': { description: OK } } }
+#     post: { summary: Create a post, responses: { '201': { description: Created } } }
+
+#   /posts/{id}:
+#     get: { summary: Get post by ID, responses: { '200': { description: OK } } }
+#     put: { summary: Update post, responses: { '200': { description: Updated } } }
+#     delete: { summary: Delete post, responses: { '200': { description: Deleted } } }
+
+#   /posts/{id}/like:
+#     post: { summary: Like a post, responses: { '200': { description: Liked } } }
+#     delete: { summary: Unlike a post, responses: { '200': { description: Unliked } } }
+
+#   /posts/{id}/comments:
+#     get: { summary: Get post comments, responses: { '200': { description: OK } } }
+#     post: { summary: Add comment, responses: { '201': { description: Created } } }
+
+#   # ==========================
+#   # 🎬 REELS
+#   # ==========================
+#   /reels:
+#     get: { summary: Get all reels, responses: { '200': { description: OK } } }
+#     post: { summary: Create a reel, responses: { '201': { description: Created } } }
+
+#   /reels/{id}:
+#     get: { summary: Get reel by ID, responses: { '200': { description: OK } } }
+#     put: { summary: Update reel, responses: { '200': { description: Updated } } }
+#     delete: { summary: Delete reel, responses: { '200': { description: Deleted } } }
+
+#   /reels/{id}/like:
+#     post: { summary: Like a reel, responses: { '200': { description: Liked } } }
+#     delete: { summary: Unlike a reel, responses: { '200': { description: Unliked } } }
+
+#   /reels/{id}/comments:
+#     get: { summary: Get reel comments, responses: { '200': { description: OK } } }
+#     post: { summary: Add comment, responses: { '201': { description: Created } } }
+
+#   # ==========================
+#   # 💬 MESSAGES
+#   # ==========================
+#   /messages/conversations:
+#     get: { summary: Get conversations, responses: { '200': { description: OK } } }
+
+#   /messages/conversations/{conversationId}:
+#     get: { summary: Get messages in conversation, responses: { '200': { description: OK } } }
+
+#   /messages/conversations/{userId}:
+#     post: { summary: Start conversation/send message, responses: { '201': { description: Created } } }
+
+#   /messages/{conversationId}:
+#     post: { summary: Send message to conversation, responses: { '201': { description: Sent } } }
+
+#   /messages/{messageId}/read:
+#     patch: { summary: Mark message as read, responses: { '200': { description: Marked read } } }
+
+#   # ==========================
+#   # 🔔 NOTIFICATIONS
+#   # ==========================
+#   /notifications:
+#     get: { summary: Get notifications, responses: { '200': { description: OK } } }
+
+#   /notifications/{id}/read:
+#     patch: { summary: Mark notification as read, responses: { '200': { description: Updated } } }
+
+#   /notifications/read-all:
+#     patch: { summary: Mark all as read, responses: { '200': { description: Updated } } }
+
+#   # ==========================
+#   # 🔖 SAVED ITEMS
+#   # ==========================
+#   /saved:
+#     get: { summary: Get saved items, responses: { '200': { description: OK } } }
+#     post: { summary: Save an item, responses: { '201': { description: Saved } } }
+
+#   /saved/{entityId}/{entityType}:
+#     delete: { summary: Unsave an item, responses: { '200': { description: Removed } } }
+
+#   # ==========================
+#   # 📰 FEED & TRENDING
+#   # ==========================
+#   /feed:
+#     get: { summary: Get personalized feed, responses: { '200': { description: OK } } }
+
+#   /trending:
+#     get: { summary: Get trending content, responses: { '200': { description: OK } } }
+
+#   # ==========================
+#   # 📋 HEALTH CHECK
+#   # ==========================
+#   /health:
+#     get: { summary: Server health check, responses: { '200': { description: Healthy } } }
+
+
+openapi: 3.0.0
+info:
+  title: Blueprint-XYZ API
+  version: 1.0.0
+  description: API documentation for the Blueprint-XYZ platform.
+servers:
+  - url: http://localhost:3000/api
+    description: Local Development Server
+
+paths:
+  # ==========================
+  # 🔐 AUTH & USERS
+  # ==========================
+  /auth/register:
+    post:
+      summary: Register a new user
+      description: Registers a new user with credentials.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, email, password]
+              properties:
+                username: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '201': { description: User registered successfully }
+        '400': { description: Invalid input }
+
+  /auth/login:
+    post:
+      summary: Log in
+      description: Authenticates a user.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: Login successful }
+        '401': { description: Unauthorized }
+
+  /auth/me:
+    get:
+      summary: Get current user
+      tags: [Auth]
+      responses:
+        '200': { description: Current user retrieved }
+        '401': { description: Unauthorized }
+
+  /users/{username}:
+    get:
+      summary: Get user profile
+      tags: [Users]
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: User profile retrieved }
+        '404': { description: User not found }
+
+  /users/me:
+    put:
+      summary: Update current user profile
+      tags: [Users]
+      responses:
+        '200': { description: Profile updated }
+        '401': { description: Unauthorized }
+
+  /users/me/profile-picture:
+    patch:
+      summary: Update profile picture
+      tags: [Users]
+      responses:
+        '200': { description: Profile picture updated }
+
+  # ==========================
+  # 🎨 PROJECTS
+  # ==========================
+  /projects:
+    get:
+      summary: Get all projects
+      tags: [Projects]
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        '200': { description: Projects retrieved }
+    post:
+      summary: Create a project
+      tags: [Projects]
+      responses:
+        '201': { description: Project created }
+
+  /projects/{id}:
+    get: { summary: Get project by ID, tags: [Projects], responses: { '200': { description: OK } } }
+    put: { summary: Update project, tags: [Projects], responses: { '200': { description: Updated } } }
+    delete: { summary: Delete project, tags: [Projects], responses: { '200': { description: Deleted } } }
+
+  /projects/{id}/like:
+    post: { summary: Like a project, tags: [Projects], responses: { '200': { description: Liked } } }
+    delete: { summary: Unlike a project, tags: [Projects], responses: { '200': { description: Unliked } } }
+
+  /projects/{id}/comments:
+    get: { summary: Get project comments, tags: [Projects], responses: { '200': { description: OK } } }
+    post: { summary: Add comment to project, tags: [Projects], responses: { '201': { description: Created } } }
+
+  # ==========================
+  # 🏢 STUDIOS
+  # ==========================
+  /studios:
+    get: { summary: Get all studios, tags: [Studios], responses: { '200': { description: OK } } }
+    post: { summary: Create a studio, tags: [Studios], responses: { '201': { description: Created } } }
+
+  /studios/{id}:
+    get: { summary: Get studio by ID, tags: [Studios], responses: { '200': { description: OK } } }
+    put: { summary: Update studio, tags: [Studios], responses: { '200': { description: Updated } } }
+    delete: { summary: Delete studio, tags: [Studios], responses: { '200': { description: Deleted } } }
+
+  /studios/{id}/members:
+    get: { summary: Get studio members, tags: [Studios], responses: { '200': { description: OK } } }
+    post: { summary: Add member, tags: [Studios], responses: { '201': { description: Added } } }
+
+  /studios/{id}/members/{userId}:
+    delete: { summary: Remove member, tags: [Studios], responses: { '200': { description: Removed } } }
+
+  /studios/{id}/jobs:
+    get: { summary: Get jobs for a studio, tags: [Studios], responses: { '200': { description: OK } } }
+
+  /studios/{id}/projects:
+    get: { summary: Get projects for a studio, tags: [Studios], responses: { '200': { description: OK } } }
+
+  # ==========================
+  # 💼 JOBS
+  # ==========================
+  /jobs:
+    get: { summary: Get all jobs, tags: [Jobs], responses: { '200': { description: OK } } }
+    post: { summary: Create job, tags: [Jobs], responses: { '201': { description: Created } } }
+
+  /jobs/{id}:
+    get: { summary: Get job by ID, tags: [Jobs], responses: { '200': { description: OK } } }
+    put: { summary: Update job, tags: [Jobs], responses: { '200': { description: Updated } } }
+    delete: { summary: Delete job, tags: [Jobs], responses: { '200': { description: Deleted } } }
+
+  # ==========================
+  # 📝 POSTS
+  # ==========================
+  /posts:
+    get: { summary: Get all posts, tags: [Posts], responses: { '200': { description: OK } } }
+    post: { summary: Create a post, tags: [Posts], responses: { '201': { description: Created } } }
+
+  /posts/{id}:
+    get: { summary: Get post by ID, tags: [Posts], responses: { '200': { description: OK } } }
+    put: { summary: Update post, tags: [Posts], responses: { '200': { description: Updated } } }
+    delete: { summary: Delete post, tags: [Posts], responses: { '200': { description: Deleted } } }
+
+  /posts/{id}/like:
+    post: { summary: Like a post, tags: [Posts], responses: { '200': { description: Liked } } }
+    delete: { summary: Unlike a post, tags: [Posts], responses: { '200': { description: Unliked } } }
+
+  /posts/{id}/comments:
+    get: { summary: Get post comments, tags: [Posts], responses: { '200': { description: OK } } }
+    post: { summary: Add comment, tags: [Posts], responses: { '201': { description: Created } } }
+
+  # ==========================
+  # 🎬 REELS
+  # ==========================
+  /reels:
+    get: { summary: Get all reels, tags: [Reels], responses: { '200': { description: OK } } }
+    post: { summary: Create a reel, tags: [Reels], responses: { '201': { description: Created } } }
+
+  /reels/{id}:
+    get: { summary: Get reel by ID, tags: [Reels], responses: { '200': { description: OK } } }
+    put: { summary: Update reel, tags: [Reels], responses: { '200': { description: Updated } } }
+    delete: { summary: Delete reel, tags: [Reels], responses: { '200': { description: Deleted } } }
+
+  /reels/{id}/like:
+    post: { summary: Like a reel, tags: [Reels], responses: { '200': { description: Liked } } }
+    delete: { summary: Unlike a reel, tags: [Reels], responses: { '200': { description: Unliked } } }
+
+  /reels/{id}/comments:
+    get: { summary: Get reel comments, tags: [Reels], responses: { '200': { description: OK } } }
+    post: { summary: Add comment, tags: [Reels], responses: { '201': { description: Created } } }
+
+  # ==========================
+  # 💬 MESSAGES
+  # ==========================
+  /messages/conversations:
+    get: { summary: Get conversations, tags: [Messages], responses: { '200': { description: OK } } }
+
+  /messages/conversations/{conversationId}:
+    get: { summary: Get messages in conversation, tags: [Messages], responses: { '200': { description: OK } } }
+
+  /messages/conversations/{userId}:
+    post: { summary: Start conversation/send message, tags: [Messages], responses: { '201': { description: Created } } }
+
+  /messages/{conversationId}:
+    post: { summary: Send message to conversation, tags: [Messages], responses: { '201': { description: Sent } } }
+
+  /messages/{messageId}/read:
+    patch: { summary: Mark message as read, tags: [Messages], responses: { '200': { description: Marked read } } }
+
+  # ==========================
+  # 🔔 NOTIFICATIONS
+  # ==========================
+  /notifications:
+    get: { summary: Get notifications, tags: [Notifications], responses: { '200': { description: OK } } }
+
+  /notifications/{id}/read:
+    patch: { summary: Mark notification as read, tags: [Notifications], responses: { '200': { description: Updated } } }
+
+  /notifications/read-all:
+    patch: { summary: Mark all as read, tags: [Notifications], responses: { '200': { description: Updated } } }
+
+  # ==========================
+  # 🔖 SAVED ITEMS
+  # ==========================
+  /saved:
+    get: { summary: Get saved items, tags: [Saved], responses: { '200': { description: OK } } }
+    post: { summary: Save an item, tags: [Saved], responses: { '201': { description: Saved } } }
+
+  /saved/{entityId}/{entityType}:
+    delete: { summary: Unsave an item, tags: [Saved], responses: { '200': { description: Removed } } }
+
+  # ==========================
+  # 📰 FEED & TRENDING
+  # ==========================
+  /feed:
+    get: { summary: Get personalized feed, tags: [Feed], responses: { '200': { description: OK } } }
+
+  /trending:
+    get: { summary: Get trending content, tags: [Feed], responses: { '200': { description: OK } } }
+
+  # ==========================
+  # 📋 HEALTH CHECK
+  # ==========================
+  /health:
+    get: { summary: Server health check, tags: [Health], responses: { '200': { description: Healthy } } }
