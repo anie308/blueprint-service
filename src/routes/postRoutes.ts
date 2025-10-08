@@ -9,6 +9,7 @@ const router = Router();
 router.get('/', validatePagination(), postController.getPosts);
 router.post('/', authenticate, validateBody(postValidation.create), postController.createPost);
 router.get('/:id', optionalAuthenticate, validateObjectId(), postController.getPost);
+router.get('/studio/:id', optionalAuthenticate, validateObjectId(), postController.getPostsByStudio);
 router.put('/:id', authenticate, validateObjectId(), validateBody(postValidation.update), postController.updatePost);
 router.delete('/:id', authenticate, validateObjectId(), postController.deletePost);
 router.post('/:id/like', authenticate, validateObjectId(), postController.likePost);

@@ -307,3 +307,60 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 For support, email support@blueprint-xyz.com or join our Discord community.
+
+## Docker
+
+This project is configured to run in a Docker container.
+
+### Prerequisites
+
+- [Docker](https.docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Running the application
+
+By default, the application will run in a development environment with hot-reloading.
+
+1.  Clone the repository:
+
+    ```bash
+    git clone https://github.com/your-username/blueprint-service.git
+    ```
+
+2.  Navigate to the project directory:
+
+    ```bash
+    cd blueprint-service
+    ```
+
+3.  Create a `.env` file by copying the `.env.example` file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Then, fill in the values in the `.env` file.
+
+4.  Build and run the application using Docker Compose:
+
+    ```bash
+    docker-compose up -d
+    ```
+
+The application will be available at `http://localhost:3000`.
+
+### Production Environment
+
+To run the application in production mode, you will need to explicitly specify the `docker-compose.yml` file:
+
+```bash
+docker-compose -f docker-compose.yml up -d
+```
+
+### Stopping the application
+
+To stop the application, run the following command:
+
+```bash
+docker-compose down
+```

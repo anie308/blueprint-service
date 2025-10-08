@@ -15,7 +15,7 @@ export const getPosts = catchAsync(async (req: AuthenticatedRequest, res: Respon
   else if (sort === 'popular') sortQuery = { likesCount: -1 };
 
   const [posts, total] = await Promise.all([
-    Post.find().populate('authorId', 'username profilePictureUrl').sort(sortQuery).skip(skip).limit(limitNum).lean(),
+    Post.find().populate('authorId', 'username profilePictureUrl fullName').sort(sortQuery).skip(skip).limit(limitNum).lean(),
     Post.countDocuments()
   ]);
 
@@ -37,7 +37,7 @@ export const createPost = catchAsync(async (req: AuthenticatedRequest, res: Resp
 // Get a specific post
 export const getPost = catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const post = await Post.findById(id).populate('authorId', 'username profilePictureUrl');
+  const post = await Post.findById(id).populate('authorId', 'username fullName profilePictureUrl');
   if (!post) return next(new AppError('Post not found', 404));
   
   let isLiked = false;
@@ -47,6 +47,22 @@ export const getPost = catchAsync(async (req: AuthenticatedRequest, res: Respons
   }
   sendSuccessResponse(res, 200, 'Post retrieved successfully', { post, isLiked });
 });
+
+export const getPostsByStudio = catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const { page = 1, limit = 20 } = req.query;
+  const pageNum = parseInt(page as string);
+  const limitNum = parseInt(limit as string);
+  const skip = (pageNum - 1) * limitNum;
+
+  const posts = await Post.find({ studioId: id }).populate('authorId', 'username profilePictureUrl fullName').sort({ createdAt: -1 }).skip(skip).limit(limitNum).lean();
+  const total = await Post.countDocuments({ studioId: id });
+  const totalPages = Math.ceil(total / limitNum);
+  sendPaginatedResponse(res, 200, 'Posts retrieved successfully', posts, {
+    page: pageNum, limit: limitNum, total, totalPages, hasNext: pageNum < totalPages, hasPrev: pageNum > 1
+  });
+});
+
 
 // Update a post
 export const updatePost = catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {

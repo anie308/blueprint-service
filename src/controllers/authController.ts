@@ -6,7 +6,7 @@ import { catchAsync, AppError, sendSuccessResponse } from '../middleware/errorHa
 
 // Register new user
 export const register = catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, fullName } = req.body;
 
   // Check if user already exists
   const existingUser = await User.findOne({
@@ -21,6 +21,7 @@ export const register = catchAsync(async (req: AuthenticatedRequest, res: Respon
   const user = await User.create({
     username,
     email,
+    fullName,
     passwordHash: password // Will be hashed by pre-save middleware
   });
 
@@ -101,7 +102,7 @@ export const updateMe = catchAsync(async (req: AuthenticatedRequest, res: Respon
     return next(new AppError('Authentication required', 401));
   }
 
-  const { username, bio, location, website, socialLinks } = req.body;
+  const { username, bio, location, website, socialLinks, fullName } = req.body;
 
   // Check if username is already taken by another user
   if (username && username !== req.user.username) {
@@ -119,7 +120,8 @@ export const updateMe = catchAsync(async (req: AuthenticatedRequest, res: Respon
       ...(bio !== undefined && { bio }),
       ...(location !== undefined && { location }),
       ...(website !== undefined && { website }),
-      ...(socialLinks && { socialLinks })
+      ...(socialLinks && { socialLinks }),
+      ...(fullName !== undefined && { fullName })
     },
     {
       new: true,
@@ -175,6 +177,7 @@ export const getUserProfile = catchAsync(async (req: AuthenticatedRequest, res: 
     website: user.website,
     socialLinks: user.socialLinks,
     subscriptionTier: user.subscriptionTier,
+    fullName: user.fullName,
     createdAt: user.createdAt
   };
 

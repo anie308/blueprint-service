@@ -4,8 +4,9 @@
   "description": "Backend API for Blueprint-XYZ creative platform",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "ts-node script/dev.ts",
     "build": "tsc",
+    "app:dev": "nodemon src/server.ts",
     "start": "node dist/server.js",
     "test": "jest",
     "lint": "eslint src/**/*.ts",

@@ -62,13 +62,16 @@ export const createStudio = catchAsync(async (req: AuthenticatedRequest, res: Re
     return next(new AppError('Authentication required', 401));
   }
 
-  const { name, description, location, website } = req.body;
+  const { name, description, slug, website, isPrivate, studioRules, category } = req.body;
 
   const studio = await Studio.create({
     name,
     description,
-    location,
     website,
+    private: isPrivate,
+    studioRules,
+    category,
+    slug,
     ownerId: req.user._id,
     members: [req.user._id] // Owner is automatically a member
   });

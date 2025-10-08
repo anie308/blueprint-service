@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 export interface IUser extends Document {
   _id: string;
   username: string;
+  fullName: string;
   email: string;
   passwordHash: string;
   profilePictureUrl?: string;
@@ -31,6 +32,15 @@ const userSchema = new Schema<IUser>(
       minlength: [3, 'Username must be at least 3 characters'],
       maxlength: [30, 'Username cannot exceed 30 characters'],
       match: [/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores']
+    },
+    fullName: {
+      type: String,
+      default: null,
+      maxlength: [100, 'Full name cannot exceed 100 characters'],
+      required: [true, 'Full name is required'],
+      trim: true,
+      match: [/^[a-zA-Z]+$/, 'Full name can only contain letters'],
+      minlength: [3, 'Full name must be at least 3 characters']
     },
     email: {
       type: String,

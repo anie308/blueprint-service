@@ -9,6 +9,8 @@ export interface IPost extends Document {
   commentsCount: number;
   createdAt: Date;
   updatedAt: Date;
+  studioId?: mongoose.Types.ObjectId;
+
 }
 
 const postSchema = new Schema<IPost>(
@@ -38,6 +40,11 @@ const postSchema = new Schema<IPost>(
       type: Number,
       default: 0,
       min: 0
+    },
+    studioId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Studio',
+      default: null
     }
   },
   {

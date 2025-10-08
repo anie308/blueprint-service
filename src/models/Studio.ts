@@ -4,10 +4,11 @@ export interface IStudio extends Document {
   _id: string;
   name: string;
   slug: string;
+  private: boolean;
+  studioRules?: string;
   logoUrl?: string;
   description: string;
-  location: string;
-  website?: string;
+  category?: string;
   ownerId: mongoose.Types.ObjectId;
   members: mongoose.Types.ObjectId[];
   createdAt: Date;
@@ -26,11 +27,23 @@ const studioSchema = new Schema<IStudio>(
     },
     slug: {
       type: String,
-      required: [true, 'Studio slug is required'],
+      // required: [true, 'Studio slug is required'],
       unique: true,
       lowercase: true,
       trim: true,
       match: [/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens']
+    },
+    private: {
+      type: Boolean,
+      default: false
+    },
+    studioRules: {
+      type: String,
+      default: null
+    },
+    category: {
+      type: String,
+      default: null
     },
     logoUrl: {
       type: String,
@@ -40,21 +53,6 @@ const studioSchema = new Schema<IStudio>(
       type: String,
       required: [true, 'Studio description is required'],
       maxlength: [1000, 'Description cannot exceed 1000 characters']
-    },
-    location: {
-      type: String,
-      required: [true, 'Studio location is required'],
-      maxlength: [100, 'Location cannot exceed 100 characters']
-    },
-    website: {
-      type: String,
-      validate: {
-        validator: function(v: string) {
-          return !v || /^https?:\/\/.+/.test(v);
-        },
-        message: 'Website must be a valid URL'
-      },
-      default: null
     },
     ownerId: {
       type: Schema.Types.ObjectId,

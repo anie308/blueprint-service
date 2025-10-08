@@ -77,26 +77,25 @@ export const studioValidation = {
       .min(2)
       .max(100)
       .required(),
-    slug: Joi.string()
-      .min(2)
-      .max(100)
-      .pattern(slugPattern)
-      .messages({
-        'string.pattern.base': 'Slug can only contain lowercase letters, numbers, and hyphens'
-      }),
+    // slug: Joi.string()
+    //   .min(2)
+    //   .max(100)
+    //   .pattern(slugPattern)
+    //   .messages({
+    //     'string.pattern.base': 'Slug can only contain lowercase letters, numbers, and hyphens'
+    //   }),
     description: Joi.string()
       .min(10)
       .max(1000)
       .required(),
-    location: Joi.string()
+    category: Joi.string()
       .max(100)
       .required(),
-    website: Joi.string()
-      .pattern(urlPattern)
-      .allow('', null)
-      .messages({
-        'string.pattern.base': 'Website must be a valid URL'
-      })
+    isPrivate: Joi.boolean()
+      .required(),
+    studioRules: Joi.string()
+      .max(1000)
+      .required()
   }),
 
   update: Joi.object({

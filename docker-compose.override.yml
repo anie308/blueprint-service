@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      target: development
+    ports:
+      - '3202:3202'
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - mongo
