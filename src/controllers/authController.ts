@@ -6,7 +6,7 @@ import { catchAsync, AppError, sendSuccessResponse } from '../middleware/errorHa
 
 // Register new user
 export const register = catchAsync(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const { username, email, password, fullName } = req.body;
+  const { username, email, password, confirmPassword, fullName } = req.body;
 
   // Check if user already exists
   const existingUser = await User.findOne({
