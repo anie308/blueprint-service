@@ -57,12 +57,14 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // CORS configuration
-app.use(cors({
-  origin: config.cors.origin,
+const allowedOrigins = [config.cors.origin, 'http://localhost:3000', "https://blueprint-xyz.vercel.app"];
+const corsOptions = {
+  origin: allowedOrigins,
   credentials: config.cors.credentials,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+app.use(cors(corsOptions));
 
 // Compression middleware
 app.use(compression());
